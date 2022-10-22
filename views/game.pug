@@ -1,0 +1,113 @@
+extends home2
+block content
+  div.upperMessage
+    br
+    p YOUR GAME CODE IS: #{gameCode}
+    br
+    div.messageDiv
+      p HERE ARE INSTRUCTIONS / A MESSAGE FROM YOUR GAME CREATOR: 
+      p#creatorMessage=creatorMessage
+  div.players
+    div.key
+      table
+        td(bgcolor='#92f7a8') IN GAME
+        td(bgcolor='#f79292') OUT OF GAME
+        td(style="font-weight:bold") HAS VOTED
+    div.playersTable
+      table
+        if allPlayers.length > 0
+          tr
+          each val in allPlayers
+            if val.isAlive == 1
+              - var backgroundColor = '#92f7a8'
+            if val.isAlive == 0
+              - var backgroundColor = '#f79292'
+            if val.hasVoted == true
+              - var fontWeight = 'font-weight:bold'
+            if val.hasVoted == false
+              - var fontWeight = 'font-weight:normal'
+            td(bgcolor=backgroundColor style=fontWeight)=(val.playerUsername)
+  div.center.votingBooth
+    -var alivePlayers = 0
+    -var alivePlayersArray = []
+    each val in allPlayers
+      if val.isAlive == 1
+        - alivePlayers = alivePlayers + 1
+        - alivePlayersArray.push(val)
+    -var flipped
+    if alivePlayers < 4
+      -var flipped = 0
+    if alivePlayers > 3
+      -var flipped = 1
+    if (alivePlayers == 1 && allPlayers.length > 1)
+      -var winnerName = alivePlayersArray[0].playerUsername
+      h4 #{winnerName} IS THE WINNER
+    else
+      if allPlayers.length < 5
+        h4 WAITING ON AT LEAST 5 PLAYERS
+      if (isAlive == flipped && nomineeId == 0 && allPlayers.length > 4)
+        if isRevote == 0
+          h4 CAST YOUR VOTE
+        if isRevote == 1
+          h4 CAST YOUR REVOTE
+        form(action='#' method='POST')#castForm
+          select(name='vote')
+            option(selected disabled) SELECT PLAYER
+            if isRevote == 0
+              p it is not a revote
+              each val in allPlayers
+                if (val.playerUsername != username && val.isAlive == 1)
+                  if firstTimeChoice == val.playerId
+                    option(value=val.playerId selected)=val.playerUsername
+                  else
+                    option(value=val.playerId)=val.playerUsername
+            if isRevote == 1
+              p it is a revote
+              each val in allPlayers
+                if (val.playerUsername != username && val.isAlive == 1 && val.inRevote == 1)
+                  if firstTimeChoice == val.playerId
+                    option(value=val.playerId selected)=val.playerUsername
+                  else
+                    option(value=val.playerId)=val.playerUsername
+          if firstTimeCast == true
+            button(formaction='castVote' type='submit') CAST
+          if firstTimeCast == false
+            button(formaction='castVoteConfirm' type='submit') CAST
+            p.errorMessage= voteErrorMessage
+  div.gameOptions.center
+    if creator
+      if firstTimeDelete && firstTimeCount
+        form(action='#' method='POST' id='creatorOptions')
+          if alivePlayers > 1
+            button(formaction='countVotes') COUNT VOTES
+          button(formaction='deleteGame') DELETE GAME
+      else
+        if !firstTimeDelete
+          form(action='#' method='POST' id='creatorOptions')
+            if alivePlayers > 1
+              button(formaction='countVotes') COUNT VOTES
+            button(formaction='deleteGameConfirm') DELETE GAME
+            p.errorMessage ARE YOU SURE YOU WANT TO DELETE THE GAME? THIS CANNOT BE UNDONE.
+        if !firstTimeCount
+          if !everyOneHasVoted
+            form(action='#' method='POST' id='creatorOptions')
+              if alivePlayers > 1
+                button(formaction='countVotes') COUNT VOTES
+              button(formaction='deleteGame') DELETE GAME
+              p.errorMessage VOTES CANNOT BE COUNTED UNTIL EVERYONE HAS VOTED.
+          else if everyOneHasVoted
+            form(action='#' method='POST' id='creatorOptions')
+              if alivePlayers > 1
+                button(formaction='countVotesConfirm') COUNT VOTES
+              button(formaction='deleteGame') DELETE GAME
+              p.errorMessage ARE YOU SURE YOU WANT TO COUNT THE VOTES? THIS CANNOT BE UNDONE.
+            
+        
+    else
+      if firstTimeLeave
+        form(action='#', method='POST')
+          button(formaction='leaveGame') LEAVE GAME
+      else
+        form(action='#', method='POST')
+          button(formaction='leaveGameConfirm') LEAVE GAME
+        p.errorMessage ARE YOU SURE? THIS CANNOT BE UNDONE IF THE GAME HAS STARTED.

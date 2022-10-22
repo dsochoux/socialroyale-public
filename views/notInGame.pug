@@ -1,0 +1,14 @@
+extends home
+block content
+  div
+    p.upperMessage YOU ARE NOT IN A GAME. WOULD YOU LIKE TO JOIN OR CREATE A GAME?
+    div.center
+      form(action='joinGame' method='POST' id='joinGame')
+        input(type='text' placeholder='GAME CODE' name='gameCode' id='gameCode')
+        button(type='submit') JOIN GAME
+      br
+      p OR
+      br
+      form(action='#' method='get')
+        button(formaction='create') CREATE GAME
+      p.errorMessage=errorMessage

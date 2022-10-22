@@ -1,0 +1,16 @@
+extends frontlayout
+block content
+  form(action="submitLogin" method="POST")
+    div.container
+      input(type="text" placeholder="USERNAME" name = "username" id="usernameInput" value=username)
+      br
+      input(type="password" placeholder="PASSWORD" name="password" id="passwordInput")
+      br
+      button(type="submit" class="loginOrSignupbutton") LOGIN
+  div.wrongCLick
+    p MADE A WRONG CLICK? 
+      a(href="signup") SIGN UP
+  div.errorMessage
+    p=errorMessage
+      
+  

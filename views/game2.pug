@@ -1,0 +1,243 @@
+extends home2
+block login
+  a(class="btn white black-text waves-effect waves-dark" href="/logout") LOGOUT
+block content
+  //-global variables
+  -var minPlayers = 5
+  -var totalNumberOfPlayers = 0
+  -var alivePlayers = 0
+  -var alivePlayersArray = []
+  -var alivePlayersIds = []
+  -var alivePlayersVotingStatus = []
+  -var deadPlayers = 0
+  -var deadPlayersVotingStatus = []
+  -var observingPlayers = 0
+  -var votesExpected = 0
+  -var numberOfCurrentVotes = 0
+  //-loading the differnt arrays based on life status
+  each val in allPlayers
+    -totalNumberOfPlayers = totalNumberOfPlayers + 1
+    if (val.hasVoted == true)
+      -numberOfCurrentVotes = numberOfCurrentVotes +1
+    //-if the player is alive
+    if val.isAlive == 1
+      - alivePlayers = alivePlayers + 1
+      - alivePlayersArray.push(val)
+      - alivePlayersIds.push(val.playerId)
+      - alivePlayersVotingStatus.push(val.hasVoted)
+    //-if the player is dead
+    if val.isAlive == 0
+      - deadPlayers = deadPlayers + 1
+      - deadPlayersVotingStatus.push(val.hasVoted)
+    //-if the player is an observer
+    if val.isAlive == 2
+      - observingPlayers = observingPlayers + 1
+  //-this is to determine if the alive or dead people vote
+  -var flipped
+  if alivePlayers < 4
+    //-note: the value of flipped when there are less than 4 people left is equal to the value of the is_alive attribute of the player
+    -var flipped = 0
+  if alivePlayers > 3
+    //-inversely similar for if there are more than 3 alive players
+    -var flipped = 1
+  //-this is the container. it literally contains everything. everything.
+  div(class="container")
+    //-this is the row that contains the text blurb at the top, giving information about the game.
+    div(clas="row")
+      div(class="col s12 center")
+        p(class="flow-text") WELCOME, #{username}.
+        p(style="margin-top: -20px;") (#{email})
+        p
+          a(href="#details" class="modal-trigger") VIEW GAME DETAILS
+        p(style="color: red")=voteErrorMessage
+        div(class="modal" id="editMessage")
+          div(class="modal-content")
+            p EDIT THE MESSAGE FOR YOUR PLAYERS
+            form(action="#" method="POST")
+              textarea(class="center" id='newMessageForPlayers' name='newMessageForPlayers' rows='3' maxlength='255' placeholder="E.G., VOTE EVERY DAY BY 10 P.M" style="padding: 10px")
+              button(class="btn waves-effect waves-light blue-grey darken-1 modal-close" type="submit" formaction='editMessage') SUBMIT EDIT
+                i(class="material-icons right") edit
+          div(class="modal-footer" style="text-align:center")
+              a(class="btn waves-effect waves-light blue-grey darken-1 modal-close" style="margin-left: 10px") CANCEL
+                i(class="material-icons right") clear
+    //-this row contains all of the cards for the players
+    div(class="row center")
+      //-this is the loop to iterate through the array of all the players that are a part of the game
+      each val in allPlayers
+        //-each card is a column. on large devices, there will be 2 cards side by side. medium is 1, and small (phones) is 1. 
+        div(class="col s12 l6")
+          //-determining the color of the card based on the life status of the player. this attribute is the class of the card div
+          if val.isAlive == 1
+            -var cardClass = "card-panel green accent-2"
+          if val.isAlive == 0
+            -var cardClass = "card-panel deep-orange lighten-2"
+          if val.isAlive == 2
+            -var cardClass = "card-panel grey lighten-1"
+          //-determining the color of the text for each card, based on the life status of the player. this attribute is the class of the card-content div.
+          div(class=cardClass)
+            div(class="row valign-wrapper")
+              div(class="col s4 m2" style="padding-top: 10px")
+                img(src=val.playerPhoto class="responsive-img circle valign")
+              div(class="col s8 m10")
+                if val.isAlive == 1
+                  -var cardContentClass = "black-text"
+                if val.isAlive == 0
+                  -var cardContentClass = "white-text"
+                if val.isAlive == 2
+                  -var cardContentClass = "white-text"
+                span(class=cardContentClass)
+                  //-making the title of the card the username of the player
+                  p(class="valign flow-text")
+                    b=val.playerUsername
+                    //-only displays the text underneath the name of the player if there are enough players in the game and there is more than one alive player (we don't want to write that stuff once somebody has won)
+                  if ((allPlayers.length - observingPlayers) > minPlayers-1 && alivePlayers > 1)
+                    if (val.isAlive == flipped && val.canVote == 1)
+                      -votesExpected = votesExpected + 1
+                      if val.hasVoted == true
+                        p HAS VOTED
+                      if val.hasVoted == false
+                        p HAS NOT VOTED
+                    else
+                      if (val.isAlive == 2)
+                        p IS OBSERVING
+                      else
+                        p NOT ELIGIBLE TO VOTE
+                  else
+                    p(class="hide-on-med-and-down") &nbsp
+    //-this conditionnel statement ensures that we only display the winner name when a player has won. we do not want to display that the creator has won when they are the only one in the game after just making it.
+    if (alivePlayers == 1 && (allPlayers.length - observingPlayers) > 1)
+      -var winnerName = alivePlayersArray[0].playerUsername
+      div(class="row center")
+        div(class="col s12")
+          h4(class="flow-text") #{winnerName} IS THE WINNER
+    else
+      if (allPlayers.length - observingPlayers) < minPlayers
+        div(class="row center")
+          div(class="col s12")
+            if (isActive == 1)
+              h5 TOO MANY PLAYERS HAVE LEFT. THE GAME HAS BEEN CANCELED.
+            else
+              h4 WAITING ON AT LEAST #{minPlayers} PLAYERS
+      else
+        if (isAlive == flipped && nomineeId == 0 && (allPlayers.length - observingPlayers) > minPlayers-1) 
+          div(class="row center")
+            form(action="#" method="POST")
+              div(class="col s12 m10 input-field")
+                select(name="vote" class="browser-default")
+                  if isRevote == 0
+                    option(value="" disabled selected) SELECT PLAYER TO VOTE OUT
+                    each val in allPlayers
+                      if (val.isAlive == 1 && val.playerEmail!=email)
+                        if firstTimeChoice == val.playerId
+                          option(value=val.playerId selected)=val.playerUsername
+                        else
+                          option(value=val.playerId)=val.playerUsername
+                  if isRevote == 1
+                    option(value="0" disabled selected) SELECT PLAYER FOR REVOTE
+                    each val in allPlayers
+                      if (val.playerEmail!=email && val.isAlive == 1 && val.inRevote == 1)
+                        if firstTimeChoice == val.playerId
+                          option(value=val.playerId selected)=val.playerUsername
+                        else
+                          option(value=val.playerId)=val.playerUsername
+                          
+              div(class="col s12 m2" style="margin-top: 18px")
+                  //-the background-color attribute is just if i want to make the buttons the gold that is in the logo
+                  a(href="#cast" class="btn waves-effect waves light blue-grey darken-1 modal-trigger" style="background-color: rgb(184, 127, 31)") CAST
+                    i(class="material-icons right") how_to_vote
+              div(class="modal" id="cast")
+                div(class="modal-content")
+                  p ARE YOU SURE YOU WANT TO CAST YOUR VOTE? THIS CANNOT BE UNDONE/CHANGED.
+                div(class="modal-footer" style="text-align: center")
+                  form(action="#" method="POST")
+                    button(class="btn waves-effect waves-light blue-grey darken-1 modal-close" type="submit" formaction='cast') YES, CAST MY VOTE
+                      i(class="material-icons right") how_to_vote
+                div(class="modal-footer" style="text-align:center")
+                  a(class="btn waves-effect waves-light blue-grey darken-1 modal-close" style="margin-left: 10px") CANCEL
+                    i(class="material-icons right") clear 
+    if (nomineeId != 0)
+      - var votedFor = ""
+      each val in alivePlayersArray
+        if (val.playerId == nomineeId)
+          -votedFor = val.playerUsername
+      div(class="row center")
+        p YOU HAVE VOTED FOR #{votedFor}
+    div(class="row center")
+      if creator
+        if ((allPlayers.length - observingPlayers) > minPlayers-1 && alivePlayers > 1)
+          a(href="#count" class="btn waves-effect waves light blue-grey darken-1 modal-trigger" style="margin: 4px;") COUNT VOTES
+            i(class="material-icons right") reduce_capacity
+        a(href="#delete" class="btn waves-effect waves light blue-grey darken-1 modal-trigger" style="margin: 4px;") DELETE GAME
+          i(class="material-icons right") delete
+        div(class="modal" id="count")
+          -var allVoted = true
+          if flipped == 1
+            each val in alivePlayersVotingStatus
+              if (val == false)
+                -allVoted = false
+          if flipped == 0
+            each val in deadPlayersVotingStatus
+              if (val == false)
+                -allVoted = false
+          if allVoted
+            div(class="modal-content")
+              p ARE YOU SURE YOU WANT TO COUNT THE VOTES? THIS CANNOT BE UNDONE.
+            div(class="modal-footer" style="text-align: center")
+              form(action="#" method="POST")
+                button(class="btn waves-effect waves-light blue-grey darken-1 modal-close" type="submit" formaction='countVotesConfirm') YES, COUNT THE VOTES
+            div(class="modal-footer" style="text-align:center")
+              a(class="btn waves-effect waves-light blue-grey darken-1 modal-close" style="margin-left: 10px") CANCEL
+                i(class="material-icons right") clear
+          else
+            div(class="modal-content")
+              p YOU CANNOT COUNT THE VOTES UNTIL EVERYONE HAS VOTED.
+            div(class="modal-footer" style="text-align: center")
+              button(class="btn waves-effect waves-light blue-grey darken-1 modal-close") OKAY
+        div(class="modal" id="delete")
+          div(class="modal-content")
+            p ARE YOU SURE YOU WOULD LIKE TO DELETE THE GAME? THIS CANNOT BE UNDONE.
+          div(class="modal-footer" style="text-align: center")
+            form(action="#" method="POST")
+              button(class="btn waves-effect waves-light blue-grey darken-1 modal-close" type="submit" formaction='deleteGameConfirm') YES, DELETE GAME
+                i(class="material-icons right") delete
+          div(class="modal-footer" style="text-align:center")
+            a(class="btn waves-effect waves-light blue-grey darken-1 modal-close" style="margin-left: 10px") CANCEL
+              i(class="material-icons right") clear
+      else
+        a(href="#leave" class="btn waves-effect waves light blue-grey darken-1 modal-trigger") LEAVE GAME
+          i(class="material-icons right") follow_the_signs
+        div(class="modal" id="leave")
+          div(class="modal-content")
+            p ARE YOU SURE YOU WOULD LIKE TO LEAVE THE GAME? THIS CANNOT BE UNDONE ONCE THE GAME HAS STARTED.
+          div(class="modal-footer" style="text-align: center")
+            form(action='#', method='POST')
+              button(class="btn waves-effect waves-light blue-grey darken-1 modal-close" type="submit" formaction='leaveGameConfirm') YES, LEAVE GAME
+                i(class="material-icons right") follow_the_signs
+          div(class="modal-footer" style="text-align:center")
+            a(class="btn waves-effect waves-light blue-grey darken-1 modal-close" style="margin-left: 10px") CANCEL
+              i(class="material-icons right") clear
+      div(class="modal" id="details")
+        div(class="modal-header center")
+          h5(class="flow-text") Game details
+        div(class="modal-content")
+          ul(class="collection")
+            li(class="collection-item") Game code: 
+              span(id="gameCodeId") #{gameCode}
+            li(class="collection-item") Creator: #{creatorName}
+            if (creator)
+              li(class="collection-item") Message: 
+                i #{creatorMessage} &nbsp
+                a(href="#editMessage" class="modal-trigger modal-close") (EDIT)
+            else
+              li(class="collection-item") Message: 
+                i #{creatorMessage}
+            li(class="collection-item") Date created: #{dateCreated}
+            li(class="collection-item") Players: #{alivePlayers + deadPlayers}, Observers: #{observingPlayers}, Total: #{alivePlayers + deadPlayers + observingPlayers}
+            li(class="collection-item") Alive: #{alivePlayers}, Dead: #{deadPlayers}
+            li(class="collection-item") Expected votes: #{votesExpected}, Votes received: #{numberOfCurrentVotes}, Waiting on: #{votesExpected - numberOfCurrentVotes}
+        div(class="modal-footer" style="text-align:center")
+          a(class="btn waves-effect waves-light blue-grey darken-1 modal-close" style="margin-left: 10px") CLOSE
+            i(class="material-icons right") clear
+          
+    br
+    br

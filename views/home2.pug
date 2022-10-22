@@ -1,0 +1,148 @@
+doctype html
+html
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-US-Compatible" content="ie=edge")
+    link(rel="icon" type="image/png" href="favicon.ico")
+    link(href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet")
+    link(href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css" rel="stylesheet")
+    link(href="https://fonts.googleapis.com/css?family=Raleway|Inconsolata" rel="stylesheet")
+    script(src="https://www.gstatic.com/firebasejs/7.17.2/firebase-app.js")
+    script(src="https://www.gstatic.com/firebasejs/7.17.2/firebase-auth.js")
+    script(src="js/firebase.js")
+  
+    title SOCIAL ROYALE
+    style
+      include home2.css
+    body
+      header
+        div(class="navbar-fixed")
+          nav(class="nav-wrapper white my-nav")
+            div(class="container")
+              a(href="/home" class="brand-logo") 
+                span(class="flow-text") SOCIAL ROYALE
+              a(href="#" class="sidenav-trigger" data-target="mobile-links")
+                i(class="material-icons") menu
+              ul(class="right hide-on-med-and-down")
+                li
+                  a(href="#instructions" class="modal-trigger") INSTRUCTIONS
+                li
+                  a(href="#faq" class="modal-trigger") FAQ
+                li
+                  a(href="#contact" class="modal-trigger") CONTACT
+                li
+                  //a(class="btn white black-text waves-effect waves-dark" href="/login") LOGIN
+                  block login
+        //-this is the code for the modals and the mobil navbar. it does not need to be indented properly because it is not being rendered until it is called.
+        ul(class="sidenav" id="mobile-links")
+          li(style="margin-left: 20px;")
+            //a(class="btn white black-text waves-effect waves-dark" href="/login") LOGIN
+            block login
+          li
+            a(href="#instructions" class="modal-trigger") INSTRUCTIONS
+          li
+            a(href="#faq" class="modal-trigger") FAQ
+          li
+            a(href="#contact" class="modal-trigger") CONTACT
+        div(class="modal" id="contact")
+          div(class="modal-content center")
+            p Have a question? Found a bug? Want to suggest a feature?
+            p Send an email to 
+              a(href="mailto:teamsocialroyale@gmail.com") teamsocialroyale@gmail.com
+          div(class="modal-footer" style="text-align: center")
+            button(class="btn waves-effect waves-light blue-grey darken-1 modal-close") CLOSE
+              i(class="material-icons right") clear
+        div(class="modal" id="faq")
+          div(class="modal-header center")
+            h5(class="flow-text") Frequently asked questions
+          div(class="modal-content")
+            ul(class="collapsible")
+              li
+                div(class="collapsible-header") How many games can I be in at a time?
+                div(class="collapsible-body") You can only be in ONE game at a time. You can always leave your game if you'd like to join a different one. Be careful when doing so because you cannot get back into your old game as a player if it has already started.
+              li
+                div(class="collapsible-header") Can I change my vote after I cast it?
+                div(class="collapsible-body") No, you are not able to change your vote after you cast it. Always make sure you are confident in your vote before casting it.
+              li
+                div(class="collapsible-header") Will other players be able to see who I voted for?
+                div(class="collapsible-body") No, other players will not be able to see who you voted for at any point in the game. That information is kept a secret.
+              li
+                div(class="collapsible-header") What happens when there is a tie in the votes?
+                div(class="collapsible-body") If there is a tie in the votes between any number of players, the next round will be considered a revote. In a revote, the only players who can be voted for are those who were tied. Players included in the revote WILL still vote.
+              li
+                div(class="collapsible-header") Should I leave the game after I have been voted out?
+                div(class="collapsible-body") No! The voting power flips from those who are alive to those who have been voted out when there are 3 players remaining. Players who have been eliminated are responsible for voting out 2 of the final 3 players, essentially selecting the winner.
+              li
+                div(class="collapsible-header") What should I do if one of the players is being unresponsive?
+                div(class="collapsible-body") In order to make sure the game creator does not have an unfair advantage, kicking players out of the game is not allowed. With that being said, the only way for a player to no longer be part of the game is if they remove themself. For long term gameplay it is always a good idea to have contact information for all of the players so you are able to ask them to leave.
+              li
+                div(class="collapsible-header") Couldn't find your question?
+                div(class="collapsible-body") Feel free to send an email to  
+                  a(href="mailto:teamsocialroyale@gmail.com") teamsocialroyale@gmail.com
+                  span .
+          div(class="modal-footer" style="text-align: center")
+            a(class="btn waves-effect waves-light blue-grey darken-1 modal-close") CLOSE
+              i(class="material-icons right" ) clear
+        div(class="modal" id="instructions")
+          div(class="modal-header center")
+            h5(class="flow-text") Instructions
+          div(class="modal-content")
+            ul(class="collapsible popout")
+              li
+                div(class="collapsible-header") About
+                div(class="collapsible-body") 
+                  p Although online, Social Royale is a game meant to be played in person. Every round, members of the game cast votes towards the other players. The person with the most votes for that round is eliminated. Your goal is to be the last one standing. 
+                    span Once there are 5 players, the game has started. If you are eliminated you are not allowed to vote in until their are 3 players left. When 3 remain, the voting power flips from those who are alive to those who have 
+                    span been eliminated. The eliminated players are responsible for voting out 2 of the final 3 players, essentially selecting the winner.
+              li
+                div(class="collapsible-header") Creating a game
+                div(class="collapsible-body") 
+                  p Creating a game is easy. As of now you are only asked to leave a message for your players (more useful for long term play). Your game is uniquely identified by a random string of 5 characters. This is what you will share with your friends to have 
+                    span them join the game, so do not share this with anybody that you do not want to play. When creating the game, you are also given the option to join the game as a player or an observer. If hosting instead of playing sounds more appealing, 
+                    span being an observer is the option for you. As game creator, you are responsible for counting the votes. This action can only be taken once everybody in the game has voted. In addition to counting the votes, you have the option to delete the game. 
+                    span PLEASE, if you are the type to delete the game out of rage because you got voted out, do NOT be the game creator. Note: you cannot leave the game if you are the creator, you can only delete it.
+              li
+                div(class="collapsible-header") Joining a game
+                div(class="collapsible-body") 
+                  p Joining a game is even easier than creating one. All you need is the 5 character game code. You can join a game as a player up until the first round of votes have been counted. After that, you are only allowed to join as an observer. Of course, joining
+                    span  as an observer is always an option if playing is not your thing. Do NOT leave the game after you have been voted out. Even though you were a player in the game, you will not be let back into the game as a player. Players that have been eliminated 
+                    span hold a responsibility at the end of the game. 
+              li
+                div(class="collapsible-header") Gameplay ideas
+                div(class="collapsible-body")
+                 div(class="row")
+                  p Social Royale can be played in many different ways. This is to help you get started, but after all, you write your own rules.
+                  div(class="col s12 m6")
+                    h6(class="flow-text") Short term
+                    p Social Royale can be used to play games that can take place in one sitting. For example, each round of the game can consist of a differnt task. Players who are alive participate in that task, and then those eligible vote on who they think did the worst. The data of who voted for who
+                      span  is kept anonymous, therefore making the vote feel like a unanimous decision.
+                  div(class="col s12 m6")
+                    h6(class="flow-text") Long term
+                    p Long term games were the original vison when creating Social Royale. As members of the game, you decide how often the votes are cast - it could range between every hour or once a day. The number of rules for this game mode are low, but the amount of strategy is high. Do what it takes to not be
+                      span  voted out. This type of gameplay is very socially oriented, hence the name. Fans of CBS's Survivor might favor this.
+              li
+                div(class="collapsible-header") Anything unclear?
+                div(class="collapsible-body") Feel free to send an email to  
+                  a(href="mailto:teamsocialroyale@gmail.com") teamsocialroyale@gmail.com
+                  span .
+          div(class="modal-footer" style="text-align: center")
+            a(class="btn waves-effect waves-light blue-grey darken-1 modal-close") CLOSE
+              i(class="material-icons right" ) clear
+    main
+      block content
+    div(class="footer-copyright")
+      div(class="row grey lighten-4" style="margin-bottom:0")
+        div(class="container")
+          div(class="col s6")
+            p(class="black-text") © 2020 Copyright Social Royale
+          div(class="col s6")
+            p(class="right black-text") Made in quarentine by Danny Sochoux
+    script(src="https://code.jquery.com/jquery-3.3.1.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js")
+    
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/latest/js.cookie.js")
+    script(src="js/firebaseAuth.js")
+    script
+      include home2.js
+    

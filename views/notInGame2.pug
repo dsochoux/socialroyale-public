@@ -1,0 +1,32 @@
+extends home2
+block login
+  a(class="btn white black-text waves-effect waves-dark" href="/logout") LOGOUT
+block content
+  div(class="container")
+    div(class="row center")
+      div(class="col s12")
+        p #{username}, YOU ARE NOT IN A GAME. WOULD YOU LIKE TO JOIN OR CREATE A GAME?
+        p(style="margin-top: -10px;") (#{email})
+        p(class="red-text").errorMessage=errorMessage
+    div(class="row center")
+      div(class="input-field col s12")
+        form(action="#" method="POST")
+          input(class="center" type='text' placeholder='GAME CODE' name='gameCode' id='gameCode' value=inputtedGameCode)
+          p JOIN AS AN OBSERVER? (NOT PLAYING)
+          div(class="switch")
+            label 
+              span NO
+              input(type="checkbox" name="observer")
+              span(class="lever")
+              span YES
+          br
+          button(class="btn waves-effect waves-light blue-grey darken-1" type="submit" formaction='joinGame') JOIN GAME
+            i(class="material-icons right") person_add
+    div(class="row center")
+      div(class="col s12")
+        p OR
+    div(class="row center")
+      div(class="col s12")
+        form(action='#' method='get')
+          button(class="btn waves-effect waves-light blue-grey darken-1" type="submit" formaction='create') CREATE GAME
+            i(class="material-icons right") create

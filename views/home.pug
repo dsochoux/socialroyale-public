@@ -1,0 +1,15 @@
+doctype html
+html
+  head
+  title SOCIAL ROYALE
+  style
+    include home.css
+  body
+    a(href="/home")
+      h1.title= "SOCIAL ROYALE"
+    p.welcomeOrLogout WELCOME, #{username}
+    p.welcomeOrLogout NOT  #{username}? 
+      a(href="/logout") LOG OUT
+    
+    div
+      block content

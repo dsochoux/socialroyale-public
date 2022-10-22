@@ -1,0 +1,101 @@
+.title{
+  color:black;
+  text-align: center;
+  margin-top: 10vh;
+}
+
+.center{
+  text-align: center;
+}
+
+a{
+  color:black;
+  text-decoration: none;
+}
+
+.welcomeOrLogout{
+  color:black;
+  text-align: center;
+}
+
+.upperMessage{
+  text-align: center;
+  margin-top: 5vh;
+  width: 500px;
+  margin: auto;
+}
+
+.messageDiv{
+  border: 2px solid black;
+}
+
+.votingBooth{
+  margin: 30px;
+}
+
+#joinGame{
+  text-align: center;
+  margin-top: 5vh;
+}
+
+#gameCode{
+  margin-right: 4px;
+}
+
+#messageForPlayers{
+  width: 20vh;
+  text-align: center;
+  resize: none;
+  padding-top: 20px;
+}
+
+#creatorMessage{
+  font-style: italic;
+}
+
+#creatorOptions button{
+  margin: 4px;
+}
+
+#castForm button{
+  margin-left: 4px;
+}
+
+.players{
+  text-align: center;
+  width: 25%;
+  margin: 10px auto;
+}
+
+.playersTable table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 10px;
+  text-align: center;
+  table-layout: fixed;
+  margin: 0 auto;
+}
+
+.key table, th, td{
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 10px;
+  text-align: center;
+  table-layout: fixed;
+  margin: 0 auto;
+  margin-bottom: 1vh;
+}
+
+
+.errorMessage{
+  text-align: center;
+  color: red;
+}
+
+/* to center the placeholder text */
+::-webkit-input-placeholder {
+  text-align: center;
+}
+:-moz-placeholder {
+  text-align: center;
+}

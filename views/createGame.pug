@@ -1,0 +1,11 @@
+extends home
+block content
+  div.upperMessage
+    p YOU ARE CREATING A GAME
+    p LEAVE INSTRUCTIONS (OR A MESSAGE) FOR YOUR PLAYERS
+    br
+    form(action='#', method='POST')
+      textarea(id='messageForPlayers' name='messageForPlayers' rows='3' maxlength='255' placeholder="E.G., VOTE EVERY DAY BY 10 P.M")
+      br
+      br
+      button(formaction='createGame') CREATE GAME

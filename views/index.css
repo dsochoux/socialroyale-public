@@ -1,0 +1,42 @@
+.title{
+  color:black;
+  text-align: center;
+  margin-top: 30vh;
+}
+
+a{
+  color:black;
+  text-decoration: none;
+}
+
+#homepageButtons{
+  display: table;
+  margin: 0 auto;
+}
+
+#homepageButtons button{
+  margin: 4px;
+}
+
+.container{
+  display: table;
+  margin: 0 auto;
+}
+
+.container input{
+  margin: 4px;
+}
+
+.loginOrSignupbutton{
+  display: table;
+  margin: 4px auto;
+}
+
+.errorMessage{
+  text-align: center;
+  color: red;
+}
+
+.wrongCLick{
+  text-align: center;
+}

@@ -1,0 +1,22 @@
+extends index
+block content
+  form(action="submitSignup" method="POST")
+    div.container
+      input(type="text" placeholder="FIRST NAME" name="firstName" id="firstName" value=firstName required)
+      br
+      input(type="text" placeholder="LAST NAME" name="lastName" id="lastName" value=lastName required)
+      br
+      input(type="text" placeholder="EMAIL" name="email" id="email" value=email required)
+      br
+      input(type="text" placeholder="USERNAME" name="username" id="username" value=username required)
+      br
+      input(type="password" placeholder="PASSWORD" name="password" id="password" required)
+      br
+      input(type="password" placeholder="REPEAT PASSWORD" name="passwordRepeat" id="passwordRepeat" required)
+      br
+      button(type="submit" class="loginOrSignupbutton") SIGN UP
+  div.wrongCLick
+    p MADE A WRONG CLICK? 
+      a(href="login") LOGIN
+  div.errorMessage
+    p=errorMessage

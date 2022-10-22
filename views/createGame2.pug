@@ -1,0 +1,23 @@
+extends home2
+block login
+  a(class="btn white black-text waves-effect waves-dark" href="/logout") LOGOUT
+block content
+  div(class="container")
+    div(class="row center")
+      div(class="col s12")
+        p YOU ARE CREATING A GAME
+        p LEAVE INSTRUCTIONS OR A MESSAGE FOR YOUR PLAYERS. THIS CAN BE CHANGED LATER. (optional)
+    div(class="row center")
+      form(action="#" method="POST")
+        div(class="input-field col s12")
+          textarea(class="center" id='messageForPlayers' name='messageForPlayers' rows='3' maxlength='255' placeholder="E.G., VOTE EVERY DAY BY 10 P.M" style="padding: 10px; resize: none;")
+          p JOIN AS AN OBSERVER? (NOT PLAYING)
+          div(class="switch")
+            label 
+              span NO
+              input(type="checkbox" name="observer")
+              span(class="lever")
+              span YES
+          br
+          button(class="btn waves-effect waves-light blue-grey darken-1" type="submit" formaction='createGame') CREATE GAME
+            i(class="material-icons right") create
